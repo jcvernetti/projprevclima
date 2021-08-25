@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <title>Previsão do tempo BT</title>
+    <style>
+        #idCol1 {
+            border: 1px;
+            border-style: solid;
+            margin: 5px;
+            padding: 7px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="container bg-info text-white ">
+        <form action="" method="GET">
+            <div>
+                <div class="row">
+                    <div class="col">
+                        <img src="img/solcomalgumasnuvens.svg" alt="">
+                    </div>
+                    <div class="col-11">
+                        <legend>Previsão do tempo</legend>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col" >
+                            <div class="container border-primary bg-gradient text-white shadow" id="idCol1">
+                                <input type="form" id="idCidade" placeholder="Entre o nome da cidade">
+                                <input type="button" value="Selecionar cidade" class="btn btn-success">
+                                <input type="reset" onclick="limpaLista()" value="Cancelar" class="btn btn-danger">
+                            </div>
+                            <hr>
+                            <div class="col" id="idCol2">
+                                <p id=""idParagrafo></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        
+
+        function limpaLista() {
+            document.querySelector("#idCidade").value = ""
+        }
+    </script>
+</body>
+
+</html>
