@@ -12,12 +12,7 @@
 
     <title>Previsão do tempo BT</title>
     <style>
-        #idCol1 {
-            border: 1px;
-            border-style: solid;
-            margin: 5px;
-            padding: 7px;
-        }
+
     </style>
 
 
@@ -32,40 +27,210 @@
                         <img src="img/solcomalgumasnuvens.svg" alt="">
                     </div>
                     <div class="col-11">
-                        <legend>Previsão do tempo</legend>
+                        <legend class="fw-bold">Previsão do tempo</legend>
                     </div>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col" >
+                        <div class="col">
                             <div class="container border-primary bg-gradient text-white shadow" id="idCol1">
                                 <input type="form" id="idCidade" placeholder="Entre o nome da cidade">
-                                <input type="button" value="Selecionar cidade" class="btn btn-success">
-                                <input type="reset" onclick="limpaLista()" value="Cancelar" class="btn btn-danger">
+                                <input type="button" value="Selecionar cidade" class="btn btn-success" id="idSelCidade">
+                                <label for="idDias">Selecione o número de dias (1 a 15)</label>
+                                <input type="number" id="idDias" name="iDdias" min="1" max="15" onchange="pegaValor()"
+                                    value="1">
+                                    <input type="button" id="idAnterior" value=" < "> <input type="button" id="idPosterior"
+                                    value=" > ">
+                                    <input type="reset" onclick="limpaLista()" value="Cancelar" class="btn btn-danger">
                             </div>
                             <hr>
-                            <div class="col" id="idCol2">
-                                <p id=""idParagrafo></p>
+                            <div class="container border-primary bg-gradient text-white shadow" id="idCol1">
+
+                                <div class="row conteudo">
+                                    <div class="col" id="idCol2">
+                                        <p id="idParagrafo"></p>
+                                    </div>
+                                    <div class="col" id="idCol2">
+                                        <p id="idParagrafo2"></p>
+                                    </div>
+                                </div>
+
+                                <div class="row conteudo">
+                                    <div class="col" id="idCol2">
+                                        <p id="idParagrafo3"></p>
+                                    </div>
+                                    <div class="col" id="idCol2">
+                                        <p id="idParagrafo4"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
         </form>
     </div>
+    <ul class="abas">
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-        crossorigin="anonymous"></script>
+        <script>
+            var sString
+            var sString2
+            var testaCidade
+            var Cidade
+            var dias
+            var contaDias = 0
 
-    <script>
+            dias = document.getElementById("idDias").value
+            console.log(dias);
+            
+            function pegaValor() {
+                dias = Number(document.getElementById("idDias").value)
+                console.log(dias);
+            }
+            
+            //Event Handler
+            var botao = document.getElementById("idSelCidade")
+            botao.onclick = function () {
+                
+                Cidade = document.getElementById("idCidade").value
+                //for (let i = 1; i <= dias; i++) {
+                   // console.log(i);
+                    buscarPrevisaoTempo(Cidade, dias)
+                //}
 
-        
+                //console.log();
+            }
 
-        function limpaLista() {
-            document.querySelector("#idCidade").value = ""
-        }
-    </script>
+            var botao1 = document.getElementById("idPosterior")
+            var botao2 = document.getElementById("idAnterior")
+            botao1.disabled = false
+            botao2.disabled = false
+
+            //Event Handler
+            botao1.onclick = function () {
+                if (contaDias < dias) {
+                    contaDias++
+                    console.log(contaDias + "  " + dias);
+                    buscarPrevisaoTempo(Cidade, contaDias)
+                } else {
+
+                }
+            }
+
+            //Event Handler
+            botao2 = document.getElementById("idAnterior")
+            botao2.onclick = function () {
+                if (contaDias > 1) {
+                    contaDias--
+                    console.log(contaDias + "  " + dias);
+                    buscarPrevisaoTempo(Cidade, contaDias)
+                } else {
+
+                }
+
+            }
+
+            function buscarPrevisaoTempo(sCidade, nDia) {
+                fetch("https://weatherapi-com.p.rapidapi.com/forecast.json?q=" + sCidade + "&days=" + nDia + "&lang=pt", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
+                        "x-rapidapi-key": "e7132b8eadmsh512e7dee1853d71p17cfb7jsn83c67dbfa5be"
+                    }
+                })
+                    .then(function (dado) {
+                        return dado.json()
+                    })
+                    .then(function (end) {
+                        var aux
+                        var max
+                        var min
+                        var ano
+                        var mes
+                        var dia
+                        //----------------------------------------------------------------
+
+                        console.log(end)
+
+                        ano = end.forecast.forecastday[nDia - 1].date.slice(0, 4)
+                        mes = end.forecast.forecastday[nDia - 1].date.slice(5, 7)
+                        dia = end.forecast.forecastday[nDia - 1].date.slice(8)
+                        console.log("Data: " + dia + "-" + mes + "-" + ano) //data do primeiro dia
+                        sString = "Data: " + dia + "-" + mes + "-" + ano + "<br>"
+
+                        console.log("País: " + end.location.country)
+                        sString += "País: " + end.location.country + "<br>"
+
+                        console.log("Estado: " + end.location.region)
+                        sString += "Estado: " + end.location.region + "<br>"
+
+                        console.log("Cidade: " + end.location.name)
+                        sString += "Cidade: " + end.location.name + "<br>"
+
+                        console.log("Latitude: " + end.location.lat + "°")
+                        sString += "Latitude: " + end.location.lat + "°" + "<br>"
+
+                        console.log("Longitude: " + end.location.lon + "°")
+                        sString += "Longitude: " + end.location.lon + "°" + "<br>"
+
+                        console.log(end.forecast.forecastday[nDia - 1]) //array do primeiro dia
+
+
+                        console.log("Horário local: " + end.location.localtime.slice(10) + " h")
+                        sString += "Horário local: " + end.location.localtime.slice(10) + " h" + "<br>"
+
+                        console.log("Condição do tempo: " + end.forecast.forecastday[nDia - 1].day.condition.text)
+                        sString += "Condição do tempo: " + end.forecast.forecastday[nDia - 1].day.condition.text + "<br>"
+
+                        console.log("Nascer do sol: " + end.forecast.forecastday[nDia - 1].astro.sunrise.slice(0, 5) + " h") //array do primeiro dia
+                        sString += "Nascer do sol: " + end.forecast.forecastday[nDia - 1].astro.sunrise.slice(0, 5) + " h" + "<br>"
+
+                        aux = end.forecast.forecastday[nDia - 1].astro.sunset
+                        aux = Number(aux.slice(0, 2)) + 12 + aux.slice(2, 5) + " h"
+                        //aux = aux + end.forecast.forecastday[nDia-1].astro.sunset.slice(2,5) + " h"
+                        console.log("Pôr do sol: " + aux)
+                        sString += "Pôr do sol: " + aux + "<br>"
+
+                        console.log("Umidade média relativa: " + end.forecast.forecastday[nDia - 1].day.avghumidity + " %");
+                        sString2 = "Umidade média relativa: " + end.forecast.forecastday[nDia - 1].day.avghumidity + " %" + "<br>"
+
+                        max = "(máx.: " + end.forecast.forecastday[nDia - 1].day.maxtemp_c + "°;"
+                        min = " min.: " + end.forecast.forecastday[nDia - 1].day.mintemp_c + "°)"
+                        console.log("Temperatura média: " + end.forecast.forecastday[nDia - 1].day.avgtemp_c + "° " + max + min);
+                        sString2 += "Temperatura média: " + end.forecast.forecastday[nDia - 1].day.avgtemp_c + "° " + max + min + "<br>"
+
+                        console.log("Velocidade média do vento: " + end.forecast.forecastday[nDia - 1].day.avgvis_km + " km/h");
+                        sString2 += "Velocidade média do vento: " + end.forecast.forecastday[nDia - 1].day.avgvis_km + " km/h" + "<br>"
+
+                        aux = end.forecast.forecastday[nDia - 1].day.daily_chance_of_rain + " %"
+                        console.log("Precipitação: " + end.forecast.forecastday[nDia - 1].day.totalprecip_mm + " mm - " + aux);
+                        sString2 += "Precipitação: " + end.forecast.forecastday[nDia - 1].day.totalprecip_mm + " mm - " + aux + "<br>"
+
+                        console.log("Nível de UV: " + end.forecast.forecastday[nDia - 1].day.uv);
+                        sString2 += "Nível de UV (*): " + end.forecast.forecastday[nDia - 1].day.uv + "<br>"
+                        console.log("Graduações do Índice UV:  menor que 2 (baixo); de 3 a 5 (Moderado); de 6 a 7 (Alto); de 8 a 9 (Muito Alto) e superior a 11 (Extremo).");
+                        sString2 += "(*) Graduações do Índice UV:" + "<br>"
+                            + "- menor que 2 (baixo)" + "<br>"
+                            + "- de 3 a 5 (Moderado)" + "<br>"
+                            + "- de 6 a 7 (Alto)" + "<br>"
+                            + "- de 8 a 9 (Muito Alto)" + "<br>"
+                            + "- superior a 11 (Extremo)"
+
+                        document.getElementById("idParagrafo").innerHTML = sString
+                        document.getElementById("idParagrafo2").innerHTML = sString2
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            }
+
+            function limpaLista() {
+                document.querySelector("#idCidade").value = ""
+            }
+        </script>
 </body>
 
 </html>
